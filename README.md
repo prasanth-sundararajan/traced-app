@@ -1,52 +1,81 @@
-# LangChain and LangSmith Tracing Demo
+# LangChain + LangSmith Tracing Demo
 
-## What this project is
+> See exactly what your LLM calls cost and how long they take, with LangSmith tracing.
 
-A command-line example in [`traced_app.py`](./traced_app.py) that sends three questions of increasing length to the OpenAI `gpt-4o-mini` model using LangChain. When LangSmith tracing is enabled, the requests can be recorded in a LangSmith project for inspection.
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white) ![LangChain](https://img.shields.io/badge/LangChain-1C3C3C?logo=langchain&logoColor=white) ![LangSmith](https://img.shields.io/badge/LangSmith-tracing-1C3C3C) ![OpenAI](https://img.shields.io/badge/OpenAI-412991?logo=openai&logoColor=white) ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 
-## Requirements and configuration
+## Overview
 
-Use Python 3.10 or newer. From PowerShell in this folder:
+A minimal **LLM observability** example. The script sends three prompts of different complexity (short, medium, long) to `gpt-4o-mini` through LangChain with LangSmith tracing turned on, so you can compare token usage and latency per run in the LangSmith dashboard.
 
-```powershell
+## Features
+
+- Pre-flight check that tracing variables are set
+- Three prompts of increasing size
+- Runs grouped in one LangSmith project for comparison
+
+## Demo
+
+![LangSmith runs](Screenshot_3_RUNS.png)
+![Token and latency view](Screenshot_Token_Latency.png)
+![Model response](Screenshot_AI_response.png)
+
+## Tech stack
+
+| Layer | Technology |
+|---|---|
+| Orchestration | LangChain |
+| Observability | LangSmith |
+| Model | OpenAI `gpt-4o-mini` |
+
+## Project structure
+
+```text
+.
+├── traced_app.py
+├── requirements.txt
+└── .env.example
+```
+
+## Getting started
+
+**Prerequisites:** Python 3.10+, a [LangSmith](https://smith.langchain.com) account
+
+```bash
+git clone https://github.com/prasanth-sundararajan/traced-app.git
+cd traced-app
 python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install python-dotenv langchain-openai
+# Windows: .venv\Scripts\activate    macOS/Linux: source .venv/bin/activate
+pip install -r requirements.txt
 ```
 
-Create a local `.env` file with the required credentials and settings:
+Copy `.env.example` to `.env` and add your keys:
 
-```dotenv
-OPENAI_API_KEY=your_openai_key
-LANGSMITH_API_KEY=your_langsmith_key
-LANGSMITH_TRACING=true
-LANGSMITH_PROJECT=your_project_name
+```bash
+cp .env.example .env
 ```
 
-Use your own key values and never commit or share them. The existing `.gitignore` ignores `.env`.
+## Usage
 
-## Run it
-
-```powershell
-python .\traced_app.py
+```bash
+python traced_app.py
 ```
+Then open your LangSmith project to inspect the three runs.
 
-The script prints each prompt and model answer. If tracing is enabled, confirm that the three runs appear in the configured LangSmith project. API calls may incur charges.
+## Configuration
 
-## What still needs to be done
+| Variable | Required | Description |
+|---|---|---|
+| `OPENAI_API_KEY` | Yes | OpenAI API key used for chat and embeddings |
+| `LANGSMITH_TRACING` | Yes | Set to `true` |
+| `LANGSMITH_API_KEY` | Yes | LangSmith API key |
+| `LANGSMITH_PROJECT` | No | Project name for the runs |
 
-- Add a `requirements.txt` with tested dependency versions.
-- Run once with valid credentials and confirm that all three answers and traces appear.
-- Test the missing-tracing configuration and confirm the script's warning is understandable.
-- Review screenshots before sharing them to make sure they do not expose API keys or private account information.
-- Add automated tests or a mock model path so basic behavior can be tested without paid API calls.
+## License
 
-## Task completed
+Released under the [MIT License](LICENSE).
 
-The script sends three example prompts of different lengths to an OpenAI model and can send run details to a LangSmith project for tracing.
+## Author
 
-## Beginner task question
-
-**Can you write a Python script that sends a few questions to an AI model, prints each answer, and records the runs in LangSmith so you can inspect them later?**
-
-Try different prompt lengths, compare the answers and run details, and make sure your API keys stay in `.env` rather than in the Python file.
+**Prasanth Sundararajan**, Senior SRE and AI Engineer  
+[LinkedIn](https://www.linkedin.com/in/prasanth-s-a093a7109/) · [GitHub](https://github.com/prasanth-sundararajan)
